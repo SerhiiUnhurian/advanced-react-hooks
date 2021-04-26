@@ -9,12 +9,15 @@ function Counter({initialCount = 0, step = 1}) {
   })
 
   function countReducer(state, newState) {
-    return {...state, ...newState}
+    return typeof newState === 'function'
+      ? newState(state)
+      : {...state, ...newState}
   }
 
   const {count} = state
-  const increment = () => setState({count: count + step})
-  return <button onClick={increment}>{state.count}</button>
+  const increment = () =>
+    setState(currentState => ({count: currentState.count + step}))
+  return <button onClick={increment}>{count}</button>
 }
 
 function App() {
